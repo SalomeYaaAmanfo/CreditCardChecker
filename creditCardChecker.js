@@ -22,66 +22,65 @@ const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3];
 // An array of all the arrays above
 const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5];
 
-// Add your functions below:
 
-function validateCred(array){
-  let sum = 0
-  for(let i = array.length-1 ;i >= 0 ;i--){
-    let checkDigit = array.length-1
-    let doubled = array[i]
-    if((checkDigit - i)% 2 == 1){
-      doubled *= 2
-      if(doubled > 9){
-        doubled -= 9
+// Add your functions below:
+function validateCred(array) {
+    let newArr = array.slice(0, array.length-1)
+    let result ;
+    let sumResult = 0;
+    for(let i = newArr.length-1; i >=0; i--){
+         result = newArr[i]
+      if(i%2 === 0) {
+        result*=2
+        if(result > 9){
+          result-=9
+        }
       }
+      sumResult+=result
     }
-    sum += doubled
-    }
-    if(sum % 2 == 0){
-      return true
-    }else{
-      return false
-    }
-}
-//console.log(validateCred(mystery2))
-function findInvalidCards(nestedArray){
-  let invalidCards = []
-  let validCards = []
-  for(let i=0; i<nestedArray.length; i++){
-    if(validateCred(nestedArray[i]) == true){
-      validCards.push(nestedArray[i])
-    }else{
-      invalidCards.push(nestedArray[i])
+    sumResult += array[array.length-1]
+    if(sumResult%10 === 0) {
+        return true
+    }else {
+        return false
     }
   }
-  return invalidCards
-}
-//console.log(findInvalidCards(batch))
-function idInvalidCardCompanies(nestedArrays){
-  let company = []
-  let companies = []
-  for(let i =0; i < nestedArrays.length; i++){
-    switch(nestedArrays[i][0]){
-      case 3:
-      if(company.indexOf('Amex')=== -1)
-      company.push('Amex')
-      break
-      case 4:
-      if(company.indexOf('Visa')=== -1)
-      company.push('Visa')
-      break
-      case 5:
-      if(company.indexOf('Mastercard')=== -1)
-      company.push('Mastercard')
-      break
-      case 6:
-      if(company.indexOf('Discover')=== -1)
-      company.push('Discover')
-      break
-      default :
-      'Company not found'
-    }
+ 
+  function findInvalidCards(array) {
+    let invalidCards = [];
+      for(let i = 0; i< array.length; i++){
+          if( validateCred(array[i]) !== true){
+            invalidCards.push(array[i])
+          }
+      }
+      return invalidCards
   }
- return company
-}
-//console.log(idInvalidCardCompanies(batch))
+
+  function idInvalidCardCompanies(array) {
+    let companies = [];
+    let myArr = findInvalidCards(array);
+      for(let i = 0; i < myArr.length; i++){
+              if( myArr[i][0] === 3 ){
+                 
+                if(companies.indexOf('Amex (American Express)') === -1){ 
+                    companies.push('Amex (American Express)')
+                }
+              }else if( myArr[i][0] === 4){
+                if(companies.indexOf('Visa') === -1){
+                    companies.push('Visa')
+                }
+              }else if(myArr[i][0] === 5){
+                if(companies.indexOf('Mastercard') === -1){
+                    companies.push('Mastercard')
+                }
+              }else if(myArr[i][0] === 6){
+                if(companies.indexOf('Discover') === -1){
+                    companies.push('Discover')
+                }
+              }else {
+                return 'Company not found' 
+              }    
+    }
+          return companies    
+  }
+  console.log(idInvalidCardCompanies(batch))
